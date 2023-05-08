@@ -1,0 +1,420 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d13a81c1b6262a4292d96c0f2d41005, type: 3}
+  m_Name: DataContainer
+  m_EditorClassIdentifier: 
+  documentID: 1T67qY6vQfQ2BJrUXRu_v7RHK1Hm7f7RfIm771J-Qqcw
+  Subtitles:
+  - ID: 0
+    Timestamp_START: 1270
+    Timestamp_END: 6980
+    Text: 'Chapter 2: Caffeine, Jet Lag, and Melatonin'
+  - ID: 1
+    Timestamp_START: 6980
+    Timestamp_END: 12090
+    Text: Losing and Gaining Control of Your Sleep Rhythm
+  - ID: 2
+    Timestamp_START: 12090
+    Timestamp_END: 15300
+    Text: "How does your body know when it\u2019s time to sleep?"
+  - ID: 3
+    Timestamp_START: 15300
+    Timestamp_END: 20289
+    Text: Why do you suffer from jet lagafter arriving in a new time zone?
+  - ID: 4
+    Timestamp_START: 20289
+    Timestamp_END: 23350
+    Text: How do you overcome jet lag?
+  - ID: 5
+    Timestamp_START: 23350
+    Timestamp_END: 26480
+    Text: Why does that acclimatization cause you yet more jet lag
+  - ID: 6
+    Timestamp_START: 26480
+    Timestamp_END: 29039
+    Text: upon returning home?
+  - ID: 7
+    Timestamp_START: 29039
+    Timestamp_END: 32719
+    Text: Why do some people use melatonin to combat these issues?
+  - ID: 8
+    Timestamp_START: 32719
+    Timestamp_END: 37329
+    Text: Why (and how) does a cup of coffee keep you awake?
+  - ID: 9
+    Timestamp_START: 37329
+    Timestamp_END: 40880
+    Text: "Perhaps most importantly, how do you know if you\u2019re getting"
+  - ID: 10
+    Timestamp_START: 40880
+    Timestamp_END: 43890
+    Text: enough sleep?
+  - ID: 11
+    Timestamp_START: 43890
+    Timestamp_END: 47360
+    Text: There are two main factors that determine when you want to sleep and when
+  - ID: 12
+    Timestamp_START: 47360
+    Timestamp_END: 49860
+    Text: you want to be awake.
+  - ID: 13
+    Timestamp_START: 49860
+    Timestamp_END: 53460
+    Text: As you read these very words, both factors are powerfully
+  - ID: 14
+    Timestamp_START: 53460
+    Timestamp_END: 56510
+    Text: influencing your mind and body.
+  - ID: 15
+    Timestamp_START: 56510
+    Timestamp_END: 59180
+    Text: The first factor is a signal beamed out from your
+  - ID: 16
+    Timestamp_START: 59180
+    Timestamp_END: 63660
+    Text: internal twenty-four-hour clock located deep within your brain.
+  - ID: 17
+    Timestamp_START: 63660
+    Timestamp_END: 67110
+    Text: The clock creates a cycling, day-night rhythm that makes you
+  - ID: 18
+    Timestamp_START: 67110
+    Timestamp_END: 72470
+    Text: feel tired or alert at regular times of night and day, respectively.
+  - ID: 19
+    Timestamp_START: 72470
+    Timestamp_END: 75450
+    Text: The second factor is a chemical substance that builds
+  - ID: 20
+    Timestamp_START: 75450
+    Timestamp_END: 79610
+    Text: "up in your brain and creates a \u201Csleep pressure.\u201D"
+  - ID: 21
+    Timestamp_START: 79610
+    Timestamp_END: 83740
+    Text: "The longer you\u2019ve been awake, themore that chemical sleep pressure
+      accumulates,"
+  - ID: 22
+    Timestamp_START: 83740
+    Timestamp_END: 88130
+    Text: and consequentially, the sleepieryou feel.
+  - ID: 23
+    Timestamp_START: 88130
+    Timestamp_END: 91860
+    Text: It is the balance between these two factorsthat dictates how alert and
+  - ID: 24
+    Timestamp_START: 91860
+    Timestamp_END: 96310
+    Text: attentive you are during the day, when youwill feel tired and ready for
+      bed at
+  - ID: 25
+    Timestamp_START: 96310
+    Timestamp_END: 102320
+    Text: night, and, in part, how well you will sleep.
+  - ID: 26
+    Timestamp_START: 102320
+    Timestamp_END: 104610
+    Text: Got Rhythm?
+  - ID: 27
+    Timestamp_START: 104610
+    Timestamp_END: 108000
+    Text: Central to many of the questions in the openingparagraph is the powerful
+  - ID: 28
+    Timestamp_START: 108000
+    Timestamp_END: 113670
+    Text: sculpting force of your twenty-four-hour rhythm,also known as your circadian
+  - ID: 29
+    Timestamp_START: 113670
+    Timestamp_END: 115100
+    Text: rhythm.
+  - ID: 30
+    Timestamp_START: 115100
+    Timestamp_END: 119450
+    Text: "Everyone generates a circadian rhythm {circa,meaning \u201Caround,\u201D
+      and"
+  - ID: 31
+    Timestamp_START: 119450
+    Timestamp_END: 124820
+    Text: "dian, derivative of diam, meaning \u201Cday\u201D)."
+  - ID: 32
+    Timestamp_START: 124820
+    Timestamp_END: 129420
+    Text: Indeed, every living creature on theplanet with a life span of more than
+      several
+  - ID: 33
+    Timestamp_START: 129420
+    Timestamp_END: 133430
+    Text: days generates this natural cycle.
+  - ID: 34
+    Timestamp_START: 133430
+    Timestamp_END: 135680
+    Text: Theinternal twenty-four-hour clock within your
+  - ID: 35
+    Timestamp_START: 135680
+    Timestamp_END: 139519
+    Text: brain communicates its dailycircadian rhythm signal to every other region
+  - ID: 36
+    Timestamp_START: 139519
+    Timestamp_END: 144170
+    Text: of your brain and every organ inyour body.
+  - ID: 37
+    Timestamp_START: 144170
+    Timestamp_END: 148099
+    Text: Your twenty-four-hour tempo helps to determinewhen you want to be awake
+  - ID: 38
+    Timestamp_START: 148099
+    Timestamp_END: 149660
+    Text: and when you want to be asleep.
+  - ID: 39
+    Timestamp_START: 149660
+    Timestamp_END: 154040
+    Text: But it controls other rhythmic patterns, too.
+  - ID: 40
+    Timestamp_START: 154040
+    Timestamp_END: 158209
+    Text: These include your timed preferences for eatingand drinking, your moods
+      and
+  - ID: 41
+    Timestamp_START: 158209
+    Timestamp_END: 164970
+    Text: emotions, the amount of urine you produce,your core body temperature, your
+      metabolic
+  - ID: 42
+    Timestamp_START: 164970
+    Timestamp_END: 168653
+    Text: rate, and the release of numerous hormones.
+  - ID: 43
+    Timestamp_START: 169124
+    Timestamp_END: 177784
+    Text: 'Footnote: I should note, from personal experience, that the amount of
+      urine you produce is a winning fact to dispense'
+  - ID: 44
+    Timestamp_START: 177784
+    Timestamp_END: 184833
+    Text: at dinner parties, family gatherings, or other such social occasions. It
+      will almost guarantee nobody will approach or
+  - ID: 45
+    Timestamp_START: 184833
+    Timestamp_END: 189372
+    Text: "speak to you again for the rest of the evening, and you\u2019ll also never
+      be invited back."
+  - ID: 46
+    Timestamp_START: 190908
+    Timestamp_END: 194840
+    Text: It is no coincidence thatthe likelihood of breaking an Olympic record
+  - ID: 47
+    Timestamp_START: 194840
+    Timestamp_END: 200629
+    Text: has been clearly tied to time of day,being maximal at the natural peak
+      of the human
+  - ID: 48
+    Timestamp_START: 200629
+    Timestamp_END: 204200
+    Text: circadian rhythm in the earlyafternoon.
+  - ID: 49
+    Timestamp_START: 204200
+    Timestamp_END: 207550
+    Text: Even the timing of births and deaths demonstratescircadian
+  - ID: 50
+    Timestamp_START: 207550
+    Timestamp_END: 212530
+    Text: rhythmicity due to the marked swings in keylife-dependent metabolic,
+  - ID: 51
+    Timestamp_START: 212530
+    Timestamp_END: 217300
+    Text: cardiovascular, temperature, and hormonalprocesses that this pacemaker
+  - ID: 52
+    Timestamp_START: 217300
+    Timestamp_END: 219280
+    Text: controls.
+  - ID: 53
+    Timestamp_START: 219280
+    Timestamp_END: 223980
+    Text: Long before we discovered this biologicalpacemaker, an ingenious experiment
+  - ID: 54
+    Timestamp_START: 223980
+    Timestamp_END: 230599
+    Text: "did something utterly remarkable: stoppedtime\u2014at least, for a plant."
+  - ID: 55
+    Timestamp_START: 230599
+    Timestamp_END: 234290
+    Text: It was in1729 when French geophysicist Jean-Jacques
+  - ID: 56
+    Timestamp_START: 234290
+    Timestamp_END: 238970
+    Text: "d\u2019Ortous de Mairan discovered thevery first evidence that plants
+      generate their"
+  - ID: 57
+    Timestamp_START: 238970
+    Timestamp_END: 241010
+    Text: own internal time.
+  - ID: 58
+    Timestamp_START: 241010
+    Timestamp_END: 245829
+    Text: De Mairan was studying the leaf movementsof a species that displayed
+  - ID: 59
+    Timestamp_START: 245829
+    Timestamp_END: 251989
+    Text: "heliotropism: when a plant\u2019s leaves or flowerstrack the trajectory
+      of the sun as it"
+  - ID: 60
+    Timestamp_START: 251989
+    Timestamp_END: 254540
+    Text: moves across the sky during the day.
+  - ID: 61
+    Timestamp_START: 254540
+    Timestamp_END: 272440
+    Text: De Mairan was intrigued by one plant inparticular, called Mimosa pudica.
+  - ID: 62
+    Timestamp_START: 272440
+    Timestamp_END: 274970
+    Text: Not only do the leaves of this plant tracethe
+  - ID: 63
+    Timestamp_START: 274970
+    Timestamp_END: 279940
+    Text: "arching daytime passage of the sun acrossthe sky\u2019s face, but at night,
+      they"
+  - ID: 64
+    Timestamp_START: 279940
+    Timestamp_END: 283400
+    Text: collapse down, almost as though they had wilted.
+  - ID: 65
+    Timestamp_START: 283400
+    Timestamp_END: 287789
+    Text: Then, at the start of thefollowing day, the leaves pop open once again
+  - ID: 66
+    Timestamp_START: 287789
+    Timestamp_END: 290930
+    Text: like an umbrella, healthy as ever.
+  - ID: 67
+    Timestamp_START: 290930
+    Timestamp_END: 295100
+    Text: This behavior repeats each and every morningand evening, and it caused
+      the
+  - ID: 68
+    Timestamp_START: 295100
+    Timestamp_END: 299890
+    Text: "famous evolutionary biologist Charles Darwinto call them \u201Csleeping
+      leaves.\u201D"
+  Phrases:
+  - ID: 0
+    Timestamp_START: 13078
+    Timestamp_END: 14669
+    Text: when it's time to sleep
+  - ID: 1
+    Timestamp_START: 21221
+    Timestamp_END: 22537
+    Text: jet lag
+  - ID: 2
+    Timestamp_START: 30225
+    Timestamp_END: 31983
+    Text: melatonin
+  - ID: 3
+    Timestamp_START: 35045
+    Timestamp_END: 36535
+    Text: coffee
+  - ID: 4
+    Timestamp_START: 59289
+    Timestamp_END: 62241
+    Text: internal twenty-four hour clock
+  - ID: 5
+    Timestamp_START: 77353
+    Timestamp_END: 79444
+    Text: sleep pressure
+  - ID: 6
+    Timestamp_START: 88723
+    Timestamp_END: 91121
+    Text: balance between these two factors
+  - ID: 7
+    Timestamp_START: 109348
+    Timestamp_END: 111716
+    Text: twenty-four-hour rhythm
+  - ID: 8
+    Timestamp_START: 112841
+    Timestamp_END: 114841
+    Text: circadian rhythm
+  - ID: 9
+    Timestamp_START: 130835
+    Timestamp_END: 132617
+    Text: natural cycle
+  - ID: 10
+    Timestamp_START: 138450
+    Timestamp_END: 140408
+    Text: every other region of your brain
+  - ID: 11
+    Timestamp_START: 140725
+    Timestamp_END: 142858
+    Text: every organ in your body
+  - ID: 12
+    Timestamp_START: 156054
+    Timestamp_END: 157257
+    Text: eating and drinking
+  - ID: 13
+    Timestamp_START: 157387
+    Timestamp_END: 159055
+    Text: moods and emotions
+  - ID: 14
+    Timestamp_START: 159390
+    Timestamp_END: 161245
+    Text: amount of urine you produce
+  - ID: 15
+    Timestamp_START: 162117
+    Timestamp_END: 163570
+    Text: core body temperature
+  - ID: 16
+    Timestamp_START: 164305
+    Timestamp_END: 165730
+    Text: metabolic rate
+  - ID: 17
+    Timestamp_START: 165998
+    Timestamp_END: 168146
+    Text: release of numerous hormones
+  - ID: 18
+    Timestamp_START: 199411
+    Timestamp_END: 201959
+    Text: peak of the human circadian rhythm
+  - ID: 19
+    Timestamp_START: 202201
+    Timestamp_END: 203476
+    Text: early afternoon
+  - ID: 20
+    Timestamp_START: 209504
+    Timestamp_END: 213338
+    Text: swings in key life-dependent metabolic, cardiovascular,
+  - ID: 21
+    Timestamp_START: 213338
+    Timestamp_END: 215706
+    Text: temperature, and hormonal processes
+  - ID: 22
+    Timestamp_START: 238179
+    Timestamp_END: 241041
+    Text: generate their own internal time
+  - ID: 23
+    Timestamp_START: 245980
+    Timestamp_END: 247788
+    Text: heliotropism
+  - ID: 24
+    Timestamp_START: 274331
+    Timestamp_END: 277085
+    Text: trace the arching daytime passage of the sun
+  - ID: 25
+    Timestamp_START: 278925
+    Timestamp_END: 281157
+    Text: at night, they collapse down
+  - ID: 26
+    Timestamp_START: 290933
+    Timestamp_END: 291991
+    Text: behavior repeats
+  - ID: 27
+    Timestamp_START: 298832
+    Timestamp_END: 300045
+    Text: sleeping leaves
