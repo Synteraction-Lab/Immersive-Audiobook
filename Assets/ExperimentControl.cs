@@ -9,7 +9,7 @@ using NRKernal;
 #if UNITY_ANDROID && !UNITY_EDITOR
     using GalleryDataProvider = NativeGalleryDataProvider;
 #else
-using GalleryDataProvider = MockGalleryDataProvider;
+    using GalleryDataProvider = MockGalleryDataProvider;
 #endif
 
 public class MockGalleryDataProvider
@@ -96,16 +96,20 @@ public class ExperimentControl : MonoBehaviour
     [SerializeField] SubtitleGenerator subtitleGenerator;
     [SerializeField] LayerMask cullingMask = -1;
     [SerializeField] bool recordSession = false;
+    [SerializeField] bool useRemote = false;
+    [SerializeField] GameObject remotePanel, floatingPanel;
+
     NRVideoCapture m_VideoCapture = null;
     public static float audioTimer;
     public static bool experimentActive = false;
+    public static AudioClip currentAudioClip;
 
     public string VideoSavePath
     {
         get
         {
             string timeStamp = Time.time.ToString().Replace(".", "").Replace(":", "");
-            string filename = string.Format("Nreal_Record_{0}.mp4", timeStamp);
+            string filename = string.Format("Immersive_Audio_{0}.mp4", timeStamp);
             return Path.Combine(Application.persistentDataPath, filename);
         }
     }
@@ -115,7 +119,19 @@ public class ExperimentControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        if (useRemote)
+        {
+            remotePanel.SetActive(true);
+            floatingPanel.SetActive(false);
+            if (gazeRectile)
+                gazeRectile.SetActive(false);
+        } else
+        {
+            remotePanel.SetActive(false);
+            floatingPanel.SetActive(true);
+            if (gazeRectile)
+                gazeRectile.SetActive(true);
+        }
     }
 
     // Update is called once per frame
@@ -144,22 +160,30 @@ public class ExperimentControl : MonoBehaviour
         audioSource.Stop();
         subtitleGenerator.RestartExperiment();
         experimentActive = false;
-        preExperimentPanel.SetActive(true);
-        transform.position = Camera.main.transform.position;
-        transform.eulerAngles = Camera.main.transform.eulerAngles.y * transform.up;
-        if (gazeRectile)
-            gazeRectile.SetActive(true);
+        if (!useRemote)
+        {
+            preExperimentPanel.SetActive(true);
+            transform.position = Camera.main.transform.position;
+            transform.eulerAngles = Camera.main.transform.eulerAngles.y * transform.up;
+            if (gazeRectile)
+                gazeRectile.SetActive(true);
+        }
+        
     }
 
     public void StartAudioBook()
     {
         
         experimentActive = true;
-        preExperimentPanel.SetActive(false);
+        if (!useRemote)
+        {
+            preExperimentPanel.SetActive(false);
+            if (gazeRectile)
+                gazeRectile.SetActive(false);
+        }
         subtitleGenerator.SetCurrentAnchor();
+        audioSource.clip = currentAudioClip;
         audioSource.Play();
-        if (gazeRectile)
-            gazeRectile.SetActive(false);
         if (recordSession)
             OnTriggerStartRecording(true);
     }

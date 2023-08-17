@@ -7,6 +7,16 @@ using UnityEngine.UI;
 
 public class SubtitleGenerator : MonoBehaviour
 {
+    public enum Script
+    {
+        Kidney,
+        Muscle,
+        Epidermis,
+        Heart,
+        WWS_Phrases,
+        WWS_Full
+    }
+
     [SerializeField] DataContainer subtitleConfigs;
     [SerializeField] GameObject subtitleObject;
     //[SerializeField] GameObject preExperimentPanel;
@@ -20,14 +30,26 @@ public class SubtitleGenerator : MonoBehaviour
     [SerializeField] LayerMask layer;
     [SerializeField] float defaultDistance = 3f;
     public bool isHeadLocked = false;
-    [SerializeField] bool isFullSentence = false;
+    //[SerializeField] bool isFullSentence = false;
     [SerializeField] int textPlacement = 0;
     [SerializeField] Transform cameraCanvasAnchor, worldCanvasAnchor;
+    [SerializeField] AudioClip[] audioClips;
+
     Transform currentCanvasAnchor;
     //[SerializeField] GameObject gazeRectile;
     int index = 0;
     //bool experimentActive = false;
     // Start is called before the first frame update
+
+    Script currentScript;
+    List<Phrase> currentPhrases;
+
+    private void Start()
+    {
+        currentScript = Script.WWS_Full;
+        currentPhrases = subtitleConfigs.WMS_FullText;
+        ExperimentControl.currentAudioClip = audioClips[4];
+    }
 
     public void RestartExperiment()
     {
@@ -54,30 +76,15 @@ public class SubtitleGenerator : MonoBehaviour
         if (!ExperimentControl.experimentActive)
             return;
         
-        if (!isFullSentence)
+        float startTime = (float)currentPhrases[index].Timestamp_START / 1000f;
+        if (ExperimentControl.audioTimer >= ((float)currentPhrases[index].Timestamp_START / 1000f))
         {
-            float startTime = (float)subtitleConfigs.Phrases[index].Timestamp_START / 1000f;
-            if (ExperimentControl.audioTimer >= ((float)subtitleConfigs.Phrases[index].Timestamp_START / 1000f))
-            {
-                GameObject subtitleObj = Instantiate(subtitleObject);
-                float endTime = (float)subtitleConfigs.Phrases[index].Timestamp_END / 1000f;
-                float lifeSpan = Mathf.Min(endTime - startTime, autoDestroyTime);
-                subtitleObj.GetComponent<WorldAnchoredSubtitle>().SetProperties(subtitleConfigs.Phrases[index].Text, lifeSpan);
-                PositionSubtitleObj(subtitleObj);
-                index++;
-            }
-        } else
-        {
-            float startTime = (float)subtitleConfigs.Subtitles[index].Timestamp_START / 1000f;
-            if (ExperimentControl.audioTimer >= startTime)
-            {
-                GameObject subtitleObj = Instantiate(subtitleObject);
-                float endTime = (float)subtitleConfigs.Subtitles[index].Timestamp_END / 1000f;
-                float lifeSpan = Mathf.Min(endTime - startTime, autoDestroyTime);
-                subtitleObj.GetComponent<WorldAnchoredSubtitle>().SetProperties(subtitleConfigs.Subtitles[index].Text, lifeSpan);
-                PositionSubtitleObj(subtitleObj);
-                index++;
-            }
+            GameObject subtitleObj = Instantiate(subtitleObject);
+            float endTime = (float)currentPhrases[index].Timestamp_END / 1000f;
+            float lifeSpan = Mathf.Min(endTime - startTime, autoDestroyTime);
+            subtitleObj.GetComponent<WorldAnchoredSubtitle>().SetProperties(currentPhrases[index].Text, lifeSpan);
+            PositionSubtitleObj(subtitleObj);
+            index++;
         }
     }
 
@@ -160,10 +167,38 @@ public class SubtitleGenerator : MonoBehaviour
         textPlacement = dropDown.value;
     }
 
-    
-    public void SetFullTextActive(Toggle toggle)
+    public void SetCurrentScript(Dropdown dropDown)
     {
-        isFullSentence = toggle.isOn;
+        currentScript = (Script)dropDown.value;
+        switch (currentScript)
+        {
+            case Script.Kidney:
+                currentPhrases = subtitleConfigs.Kidney;
+                ExperimentControl.currentAudioClip = audioClips[0];
+                break;
+            case Script.Muscle:
+                currentPhrases = subtitleConfigs.Muscle;
+                ExperimentControl.currentAudioClip = audioClips[1];
+                break;
+            case Script.Epidermis:
+                currentPhrases = subtitleConfigs.Epidermis;
+                ExperimentControl.currentAudioClip = audioClips[2];
+                break;
+            case Script.Heart:
+                currentPhrases = subtitleConfigs.Heart;
+                ExperimentControl.currentAudioClip = audioClips[3];
+                break;
+            case Script.WWS_Phrases:
+                currentPhrases = subtitleConfigs.WMS_Phrases;
+                ExperimentControl.currentAudioClip = audioClips[4];
+                break;
+            case Script.WWS_Full:
+                currentPhrases = subtitleConfigs.WMS_FullText;
+                ExperimentControl.currentAudioClip = audioClips[4];
+                break;
+            default:
+                break;
+        }
     }
 
     private IEnumerator ChangeTrackingType(NRHMDPoseTracker.TrackingType type)
