@@ -6,10 +6,12 @@ public class ExperimentManager : MonoBehaviour
 {
     public enum bookNames
     {
-        the_ocean,
-        the_martian,
         blood_work,
-        dogs_of_riga
+        dogs_of_riga,
+        the_martian,
+        the_ocean,
+        educated,
+        the_wind
     }
 
     [System.Serializable]
@@ -19,6 +21,7 @@ public class ExperimentManager : MonoBehaviour
         public int frequency = 6;
         public float timingOffset = 0f;
         public float fadeTime = 2f;
+        public float scale = 1f;
         public bool maintainGap = false;
         public bool showTimeline = false;
     }
@@ -50,7 +53,7 @@ public class ExperimentManager : MonoBehaviour
     private float clipTime;
     private int currentIllusIndex, nextIllusIndex;
     private int currentReelContainerIndex;
-    private const float imgReelOffset = 312.32f, imgReelMid = -259f, imgReelX = -911f, intermediateTransparency = 0.2f;
+    private const float imgDefaultDim = 500f, imgReelMid = -192f, imgReelX = -833f, intermediateTransparency = 0.2f;
 
     private void Start()
     {
@@ -76,7 +79,7 @@ public class ExperimentManager : MonoBehaviour
             clipTime = audioSource.time;
             if (nextIllusIndex < illustrationTimestamps.Count)
             {
-                if (clipTime > Mathf.Max((illustrationTimestamps[nextIllusIndex].startTimeInSeconds - meta.fadeTime/2f), 0f))
+                if (clipTime > Mathf.Max((illustrationTimestamps[nextIllusIndex].startTimeInSeconds - meta.fadeTime/2f + meta.timingOffset), 0f))
                 {
                     currentIllusIndex = nextIllusIndex;
                     nextIllusIndex++;
@@ -123,12 +126,29 @@ public class ExperimentManager : MonoBehaviour
         DebugText.Instance.SetText("Experiment Started!");
         currentIllusIndex = -1;
         nextIllusIndex = 0;
+        illusBorder.rectTransform.localScale = Vector3.one;
         foreach (Image img in illusContainers)
         {
             img.gameObject.SetActive(false);
+            img.rectTransform.localScale = Vector3.one * meta.scale;
+
         }
         if (meta.showTimeline)
+        {
+            foreach (Image img in illusReel)
+            {
+                img.gameObject.SetActive(true);
+            }
             InitializeIllustrationReel();
+        }
+        else
+        {
+            foreach (Image img in illusReel)
+            {
+                img.gameObject.SetActive(false);
+            }
+            illusBorder.rectTransform.localScale = Vector3.one * meta.scale;
+        }
         experiemntStartTime = Time.realtimeSinceStartup;
         InputController.touchEnabled = true;
     }
@@ -154,20 +174,28 @@ public class ExperimentManager : MonoBehaviour
         switch(meta.bookName)
         {
             case bookNames.the_ocean:
-                audiobookIllustrations = data.the_martian_test;
+                audiobookIllustrations = data.the_ocean;
                 bookName = "the_ocean";
                 break;
             case bookNames.the_martian:
-                audiobookIllustrations = data.the_martian_test;
+                audiobookIllustrations = data.the_martian;
                 bookName = "the_martian";
                 break;
             case bookNames.blood_work:
-                audiobookIllustrations = data.the_martian_test;
+                audiobookIllustrations = data.blook_work;
                 bookName = "blood_work";
                 break;
             case bookNames.dogs_of_riga:
-                audiobookIllustrations = data.the_martian_test;
+                audiobookIllustrations = data.dogs_of_riga;
                 bookName = "dogs_of_riga";
+                break;
+            case bookNames.educated:
+                audiobookIllustrations = data.educated;
+                bookName = "educated";
+                break;
+            case bookNames.the_wind:
+                audiobookIllustrations = data.the_wind;
+                bookName = "the_wind";
                 break;
             default:
                 audiobookIllustrations = null;
@@ -235,17 +263,17 @@ public class ExperimentManager : MonoBehaviour
 
         float timeDiff = nextTimestamp - illustrationTimestamps[currentIllusIndex].startTimeInSeconds;
 
-        while (timer < (timeDiff - meta.fadeTime/2f))
+        while (timer < (timeDiff - meta.fadeTime))
         {
             timer += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
 
         //Fade out
-        while (timer < (timeDiff + meta.fadeTime / 2f))
+        while (timer < timeDiff)
         {
             Color c = currentContainer.color;
-            c = new Color(c.r, c.g, c.b, (timeDiff + meta.fadeTime / 2f - timer) / meta.fadeTime);
+            c = new Color(c.r, c.g, c.b, (timeDiff - timer) / meta.fadeTime);
             currentContainer.color = c;
             //mageBorderRenderer.material.color = c;
             timer += Time.deltaTime;
@@ -260,13 +288,21 @@ public class ExperimentManager : MonoBehaviour
     {
         for(int i = 0; i < illusReel.Length; i++)
         {
-            illusReel[i].rectTransform.anchoredPosition = new Vector2(imgReelX, imgReelMid + (Mod((-i+1),5)-2) * imgReelOffset);
+            illusReel[i].rectTransform.anchoredPosition = new Vector2(imgReelX, imgReelMid + (Mod((-i+1),5)-2) * imgDefaultDim);
         }
         currentReelContainerIndex = 0;
         illusReel[0].sprite = illustrationTimestamps[0].audiobookSprite;
         illusReel[0].color = new Color(1f, 1f, 1f, intermediateTransparency);
         illusReel[1].sprite = illustrationTimestamps[1].audiobookSprite;
         illusReel[1].color = new Color(1f, 1f, 1f, 0f);
+        illusReel[2].sprite = null;
+        illusReel[2].color = new Color(1f, 1f, 1f, 0f);
+        illusReel[3].sprite = null;
+        illusReel[3].color = new Color(1f, 1f, 1f, 0f);
+        illusReel[4].sprite = null;
+        illusReel[4].color = new Color(1f, 1f, 1f, 0f);
+        illusReel[5].sprite = null;
+        illusReel[5].color = new Color(1f, 1f, 1f, 0f);
     }
     IEnumerator DisplayIllustrationReel(int midContainerIndex)
     {
@@ -283,13 +319,13 @@ public class ExperimentManager : MonoBehaviour
             nextNextContainer.sprite = null;
 
         float yStartMid = midContainer.rectTransform.anchoredPosition.y;
-        float yEndMid = yStartMid + imgReelOffset;
+        float yEndMid = yStartMid + imgDefaultDim;
         float yStartNext = nextContainer.rectTransform.anchoredPosition.y;
-        float yEndNext = yStartNext + imgReelOffset;
+        float yEndNext = yStartNext + imgDefaultDim;
         float yStartPre = preContainer.rectTransform.anchoredPosition.y;
-        float yEndPre = yStartPre + imgReelOffset;
+        float yEndPre = yStartPre + imgDefaultDim;
         float yStartPrePre = prePreContainer.rectTransform.anchoredPosition.y;
-        float yEndPrePre = yStartPrePre + imgReelOffset;
+        float yEndPrePre = yStartPrePre + imgDefaultDim;
 
 
 
@@ -304,7 +340,7 @@ public class ExperimentManager : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-        nextNextContainer.rectTransform.anchoredPosition = new Vector2(imgReelX, imgReelMid - 2 * imgReelOffset);
+        nextNextContainer.rectTransform.anchoredPosition = new Vector2(imgReelX, imgReelMid - 2 * imgDefaultDim);
 
     }
 
@@ -322,5 +358,38 @@ public class ExperimentManager : MonoBehaviour
 
     }
 
+    public void ChangeFrequencyLevel(Slider slider)
+    {
+        meta.frequency = (int)slider.value * 2;
+        ValueChanger.onValueChange.Invoke();
+    }
+
+    public void ChangeTiming(Slider slider)
+    {
+        meta.timingOffset = (int)slider.value;
+        ValueChanger.onValueChange.Invoke();
+    }
+
+    public void ChangeScale(Slider slider)
+    {
+        meta.scale = Mathf.Pow(1.3f, slider.value);
+        ValueChanger.onValueChange.Invoke();
+    }
+
+    public void ChangeAudiobook(int index)
+    {
+        meta.bookName = (bookNames)index;
+    }
+
+    public void SwitchToTimeline(Toggle toggle)
+    {
+        meta.showTimeline = toggle.isOn;
+    }
+
     int Mod(int a, int n) => (a % n + n) % n;
+
+    public Meta GetMeta()
+    {
+        return meta;
+    }
 }
