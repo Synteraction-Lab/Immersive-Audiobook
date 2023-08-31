@@ -18,6 +18,22 @@ public class DataContainer : DataContainerBase
     public List<AudiobookIllustration> educated;
     [PageName("The Wind")]
     public List<AudiobookIllustration> the_wind;
+    [PageName("Dogs of Riga Full")]
+    public List<AudiobookIllustration> dogs_of_riga_full;
+    [PageName("The Ocean Full")]
+    public List<AudiobookIllustration> the_ocean_full;
+    [PageName("Blood Work User")]
+    public List<AudiobookIllustration> blood_word_user;
+    [PageName("Dogs of Riga User")]
+    public List<AudiobookIllustration> dogs_of_riga_user;
+    [PageName("The Martian User")]
+    public List<AudiobookIllustration> the_martian_user;
+    [PageName("The Ocean User")]
+    public List<AudiobookIllustration> the_ocean_user;
+    [PageName("Educated User")]
+    public List<AudiobookIllustration> educated_user;
+    [PageName("The Wind User")]
+    public List<AudiobookIllustration> the_wind_user;
 }
 
 [System.Serializable]
