@@ -301,8 +301,6 @@ public class ExperimentManager : MonoBehaviour
         illusReel[3].color = new Color(1f, 1f, 1f, 0f);
         illusReel[4].sprite = null;
         illusReel[4].color = new Color(1f, 1f, 1f, 0f);
-        illusReel[5].sprite = null;
-        illusReel[5].color = new Color(1f, 1f, 1f, 0f);
     }
     IEnumerator DisplayIllustrationReel(int midContainerIndex)
     {
