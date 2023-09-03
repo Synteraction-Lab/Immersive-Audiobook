@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using GoogleSheetsForUnity;
+using System.IO;
 public class ExperimentManager : MonoBehaviour
 {
     public enum bookNames
@@ -35,6 +36,15 @@ public class ExperimentManager : MonoBehaviour
         public bool showTimeline = false;
     }
 
+    [System.Serializable]
+    public class AudiobookIllustration
+    {
+        public float timestamp;
+        public float duration;
+        public string filename;
+        public string frequency;
+    }
+
     [SerializeField] Meta meta;
     public class IllustrationTimestamp
     {
@@ -46,7 +56,17 @@ public class ExperimentManager : MonoBehaviour
             startTimeInSeconds = startTime;
             this.druation = duration;
             if (isUser)
+            {
                 audiobookSprite = Resources.Load<Sprite>("Illustrations_User/" + name);
+                if (audiobookSprite == null)
+                    audiobookSprite = Resources.Load<Sprite>("Illustrations/" + name);
+                //audiobookSprite = Resources.Load<Sprite>(Application.persistentDataPath + "/Workshop/" + name + ".png");
+                //audiobookSprite = ExperimentManager.LoadNewSprite(Application.persistentDataPath + "/Workshop/" + name + ".png");
+                //if(audiobookSprite == null)
+                //   audiobookSprite = ExperimentManager.LoadNewSprite(Application.persistentDataPath + "/Workshop/" + name + ".jpg");
+                //audiobookSprite = ExperimentManager.LoadNewSprite(Application.persistentDataPath + "/Workshop/" + name + ".png");
+                //audiobookSprite = Resources.Load<Sprite>(Application.persistentDataPath + "/Placeholder/" + name);
+            }
             else
                 audiobookSprite = Resources.Load<Sprite>("Illustrations/" + name);
         }
@@ -54,7 +74,7 @@ public class ExperimentManager : MonoBehaviour
 
     List<IllustrationTimestamp> illustrationTimestamps = new List<IllustrationTimestamp>();
     AudioClip clip;
-    [SerializeField] DataContainer data;
+    //[SerializeField] DataContainer data;
     [SerializeField] Image[] illusContainers; //for morphing between two
     [SerializeField] Image[] illusReel; //for rolling effect
     [SerializeField] Image illusBorder;
@@ -66,9 +86,28 @@ public class ExperimentManager : MonoBehaviour
     private int currentIllusIndex, nextIllusIndex;
     private int currentReelContainerIndex;
     private const float imgDefaultDim = 500f, imgReelMid = -192f, imgReelX = -833f, intermediateTransparency = 0.2f;
+    private string _tableName;
+    private Dictionary<string, AudiobookIllustration[]> illustrationLookUpTable = new Dictionary<string, AudiobookIllustration[]>();
+
+    [SerializeField] GameObject loadingPanel;
+    private bool loading;
+    string saveFileName = "datasheet.json";
 
     private void Start()
     {
+        illustrationLookUpTable.Clear();
+        string saveFile = Application.persistentDataPath + "/" + saveFileName;
+        if (File.Exists(saveFile))
+        {
+            string loadFile = File.ReadAllText(saveFile);
+            var tables = JsonHelper.ArrayFromJson<Drive.DataContainer>(loadFile);
+            for (int i = 0; i < tables.Length; i++)
+            {
+                Debug.Log("Loading Data from " + tables[i].objType + "\n" + tables[i].payload);
+                AudiobookIllustration[] audiobookIllustrations = JsonHelper.ArrayFromJson<AudiobookIllustration>(tables[i].payload);
+                illustrationLookUpTable.Add(tables[i].objType, audiobookIllustrations);
+            }
+        }
         currentIllusIndex = -1;
         nextIllusIndex = 0;
         foreach (Image img in illusContainers)
@@ -78,13 +117,68 @@ public class ExperimentManager : MonoBehaviour
 
     }
 
+    string GetTableNameWithEnum(bookNames bookName)
+    {
+        switch (bookName)
+        {
+            case bookNames.the_ocean:
+                return "The Ocean";
+            case bookNames.the_martian:
+                return "The Martian";
+            case bookNames.blood_work:
+                return "Blood Work";
+            case bookNames.dogs_of_riga:
+                return "Dogs of Riga";
+            case bookNames.educated:
+                return "Educated";
+            case bookNames.the_wind:
+                return "The Wind";
+            case bookNames.dogs_of_riga_full:
+                return "Dogs of Riga Full";
+            case bookNames.the_ocean_full:
+                return "The Ocean Full";
+            case bookNames.blood_work_user:
+                return "Blood Work User";
+            case bookNames.dogs_of_riga_user:
+                return "Dogs of Riga User";
+            case bookNames.the_martian_user:
+                return "The Martian User";
+            case bookNames.the_ocean_user:
+                return "The Ocean User";
+            case bookNames.educated_user:
+                return "Educated User";
+            case bookNames.the_wind_user:
+                return "The Wind User";
+            default:
+                return "Undefined";
+        }
+    }
+
+    public void RefreshData()
+    {
+        illustrationLookUpTable.Clear();
+        loading = true;
+        loadingPanel.SetActive(true);
+        Drive.GetAllTables(true);
+    }
+
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.S))
         {
-
-            StartExperiment();
+            StopExperiment();
         }
+
+        if (loading)
+        {
+            if(illustrationLookUpTable.Count != 0)
+            {
+                loading = false;
+                loadingPanel.SetActive(false);
+            }
+            
+        }
+
 
         if (experimentStarted)
         {
@@ -163,6 +257,13 @@ public class ExperimentManager : MonoBehaviour
             }
             illusBorder.rectTransform.localScale = Vector3.one * meta.scale;
         }
+        if(meta.bookName == bookNames.blood_work_user)
+        {
+            illusBorder.gameObject.SetActive(false);
+        } else
+        {
+            illusBorder.gameObject.SetActive(true);
+        }
         experiemntStartTime = Time.realtimeSinceStartup;
         InputController.touchEnabled = true;
     }
@@ -183,68 +284,58 @@ public class ExperimentManager : MonoBehaviour
     void InitializeContent()
     {
         illustrationTimestamps.Clear();
-        List<AudiobookIllustration> audiobookIllustrations;
+        AudiobookIllustration[] audiobookIllustrations;
         string bookName = "undefined";
+        if(!illustrationLookUpTable.TryGetValue(GetTableNameWithEnum(meta.bookName), out audiobookIllustrations))
+        {
+            DebugText.Instance.SetText("Book Name Look Up Failed!");
+            return;
+        }
         switch (meta.bookName)
         {
             case bookNames.the_ocean:
-                audiobookIllustrations = data.the_ocean;
                 bookName = "the_ocean";
                 break;
             case bookNames.the_martian:
-                audiobookIllustrations = data.the_martian;
                 bookName = "the_martian";
                 break;
             case bookNames.blood_work:
-                audiobookIllustrations = data.blook_work;
                 bookName = "blood_work";
                 break;
             case bookNames.dogs_of_riga:
-                audiobookIllustrations = data.dogs_of_riga;
                 bookName = "dogs_of_riga";
                 break;
             case bookNames.educated:
-                audiobookIllustrations = data.educated;
                 bookName = "educated";
                 break;
             case bookNames.the_wind:
-                audiobookIllustrations = data.the_wind;
                 bookName = "the_wind";
                 break;
             case bookNames.dogs_of_riga_full:
-                audiobookIllustrations = data.dogs_of_riga_full;
                 bookName = "dogs_of_riga_full";
                 break;
             case bookNames.the_ocean_full:
-                audiobookIllustrations = data.the_ocean_full;
                 bookName = "the_ocean_full";
                 break;
             case bookNames.blood_work_user:
-                audiobookIllustrations = data.blood_word_user;
                 bookName = "blood_work";
                 break;
             case bookNames.dogs_of_riga_user:
-                audiobookIllustrations = data.dogs_of_riga_user;
-                bookName = "dogs_or_riga";
+                bookName = "dogs_of_riga";
                 break;
             case bookNames.the_martian_user:
-                audiobookIllustrations = data.the_martian_user;
                 bookName = "the_martian";
                 break;
             case bookNames.the_ocean_user:
-                audiobookIllustrations = data.the_ocean_user;
                 bookName = "the_ocean";
                 break;
             case bookNames.educated_user:
-                audiobookIllustrations = data.educated_user;
                 bookName = "educated";
                 break;
             case bookNames.the_wind_user:
-                audiobookIllustrations = data.the_wind_user;
                 bookName = "the_wind";
                 break;
             default:
-                audiobookIllustrations = null;
                 bookName = "undefined";
                 break;
         }
@@ -257,9 +348,10 @@ public class ExperimentManager : MonoBehaviour
 
         foreach (AudiobookIllustration ai in audiobookIllustrations)
         {
-            if (ai.frequency[meta.frequency - 1] == 1)
+            string[] frequencies = ai.frequency.Split(',');
+            if (int.Parse(frequencies[meta.frequency - 1]) == 1)
             {
-                if (bookName.Contains("user"))
+                if (GetTableNameWithEnum(meta.bookName).Contains("User"))
                     illustrationTimestamps.Add(new IllustrationTimestamp(ai.timestamp, ai.duration, ai.filename, true));
                 else
                     illustrationTimestamps.Add(new IllustrationTimestamp(ai.timestamp, ai.duration, ai.filename, false));
@@ -445,41 +537,67 @@ public class ExperimentManager : MonoBehaviour
         return meta;
     }
 
-    //public void HandleDriveResponse(Drive.DataContainer dataContainer)
-    //{
-    //    if (dataContainer.QueryType == Drive.QueryType.getTable)
-    //    {
-    //        string rawJSon = dataContainer.payload;
-    //
-    //        // Check if the type is correct.
-    //        if (string.Compare(dataContainer.objType, _tableName) == 0)
-    //        {
-    //            // Parse from json to the desired object type.
-    //            PlayerInfo[] players = JsonHelper.ArrayFromJson<PlayerInfo>(rawJSon);
-    //
-    //            string logMsg = "<color=yellow>" + players.Length.ToString() + " objects retrieved from the cloud and parsed:</color>";
-    //            for (int i = 0; i < players.Length; i++)
-    //            {
-    //                logMsg += "\n" +
-    //                    "<color=blue>Name: " + players[i].name + "</color>\n" +
-    //                    "Level: " + players[i].level + "\n" +
-    //                    "Health: " + players[i].health + "\n" +
-    //                    "Role: " + players[i].role + "\n";
-    //            }
-    //            Debug.Log(logMsg);
-    //        }
-    //    }
-    //}
-    //
-    //private void OnEnable()
-    //{
-    //    // Suscribe for catching cloud responses.
-    //    Drive.responseCallback += HandleDriveResponse;
-    //}
-    //
-    //private void OnDisable()
-    //{
-    //    // Remove listeners.
-    //    Drive.responseCallback -= HandleDriveResponse;
-    //}
+    public void HandleDriveResponse(Drive.DataContainer dataContainer)
+    {
+        if (dataContainer.QueryType == Drive.QueryType.getAllTables)
+        {
+            string rawJSon = dataContainer.payload;
+
+            File.WriteAllText(Application.persistentDataPath + "/" + saveFileName, rawJSon);
+
+            Drive.DataContainer[] tables = JsonHelper.ArrayFromJson<Drive.DataContainer>(rawJSon);
+
+            for (int i = 0; i < tables.Length; i++)
+            {
+                Debug.Log("Loading Data from " + tables[i].objType + "\n" + tables[i].payload);
+                AudiobookIllustration[] audiobookIllustrations = JsonHelper.ArrayFromJson<AudiobookIllustration>(tables[i].payload);
+                illustrationLookUpTable.Add(tables[i].objType, audiobookIllustrations);
+            }
+
+            
+        }
+    }
+    
+    private void OnEnable()
+    {
+        // Suscribe for catching cloud responses.
+        Drive.responseCallback += HandleDriveResponse;
+    }
+    
+    private void OnDisable()
+    {
+        // Remove listeners.
+        Drive.responseCallback -= HandleDriveResponse;
+    }
+
+    public static Texture2D LoadTexture(string FilePath)
+    {
+
+        // Load a PNG or JPG file from disk to a Texture2D
+        // Returns null if load fails
+
+        Texture2D Tex2D;
+        byte[] FileData;
+
+        if (File.Exists(FilePath))
+        {
+            FileData = File.ReadAllBytes(FilePath);
+            Tex2D = new Texture2D(2, 2);           // Create new "empty" texture
+            if (Tex2D.LoadImage(FileData))           // Load the imagedata into the texture (size is set automatically)
+                return Tex2D;                 // If data = readable -> return texture
+        }
+        return null;                     // Return null if load failed
+    }
+
+    public static Sprite LoadNewSprite(string FilePath, float PixelsPerUnit = 100.0f)
+    {
+
+        // Load a PNG or JPG image from disk to a Texture2D, assign this texture to a new sprite and return its reference
+
+        Sprite NewSprite;
+        Texture2D SpriteTexture = LoadTexture(FilePath);
+        NewSprite = Sprite.Create(SpriteTexture, new Rect(0, 0, SpriteTexture.width, SpriteTexture.height), new Vector2(0, 0), PixelsPerUnit);
+
+        return NewSprite;
+    }
 }
